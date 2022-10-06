@@ -1,0 +1,6 @@
+{
+    "signingSecret": "signing secret",
+    "token": "xoxb token",
+    "appToken": "xapp token",
+    "mongo": "mongodb url"
+}

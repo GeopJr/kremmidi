@@ -1,0 +1,7 @@
+kremmidi
+data/
+*.asc
+*.apk
+# discord/
+# matrix/
+archive

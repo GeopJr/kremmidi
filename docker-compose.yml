@@ -1,0 +1,17 @@
+version: “3.8”
+
+services:
+  kremmidi:
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+        KREMMIDI_DB: mongodb://mongodb:27017
+    depends_on:
+      - 'mongodb'
+  mongodb:
+    image: 'mongo:latest'
+    container_name: 'mongo'
+    ports:
+      - '27017:27017'
+    restart: always

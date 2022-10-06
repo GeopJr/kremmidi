@@ -1,0 +1,5 @@
+{
+    "clientId": "Discord bot client ID",
+    "token": "Discord bot token",
+    "mongo": "mongodb url"
+}

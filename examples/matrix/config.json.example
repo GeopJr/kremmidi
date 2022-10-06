@@ -1,0 +1,4 @@
+{
+    "accessToken": "Bot account access token",
+    "mongo": "mongodb url"
+}
