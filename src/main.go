@@ -107,7 +107,7 @@ func main() {
 	no_desktop := false
 	no_should_split := false
 
-	// mirror in string from CLI
+	// mirror as string from CLI
 	var mirror_tmp string
 
 	app := &cli.App{

@@ -44,6 +44,10 @@ func download_binary(url string, dest string, mirror Mirror, overwrite bool) str
 	resp, err := http.Get(url)
 	check(err)
 
+	if resp.StatusCode > 400 {
+		log.Fatalf("Downloading "+safe_url+" failed with status code: %d\n", resp.StatusCode)
+	}
+
 	defer resp.Body.Close()
 
 	_, err = io.Copy(out, resp.Body)

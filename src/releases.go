@@ -4,14 +4,12 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
-	"time"
 )
 
 type Link struct {
@@ -66,37 +64,30 @@ func renew_releases(dest string) Releases {
 // 	return releases.Downloads[platform][locale].Sig != ""
 // }
 
-// Whether it should renew.
+// [Unused] Whether it should renew.
 // True only if releases.json doesn't exit
 // or a day has passed since it got last
 // renewd.
-func should_renew(data_path string) bool {
-	if file_info, err := os.Stat(filepath.Join(data_path, "releases.json")); err == nil {
-		last_mod_plus_1_day := file_info.ModTime().AddDate(0, 0, 1)
-		if last_mod_plus_1_day.UnixMilli() < time.Now().UnixMilli() {
-			return true
-		} else {
-			return false
-		}
-	} else if errors.Is(err, os.ErrNotExist) {
-		return true
-	} else {
-		check(err)
-	}
+// func should_renew(data_path string) bool {
+// 	if file_info, err := os.Stat(filepath.Join(data_path, "releases.json")); err == nil {
+// 		last_mod_plus_1_day := file_info.ModTime().AddDate(0, 0, 1)
+// 		if last_mod_plus_1_day.UnixMilli() < time.Now().UnixMilli() {
+// 			return true
+// 		} else {
+// 			return false
+// 		}
+// 	} else if errors.Is(err, os.ErrNotExist) {
+// 		return true
+// 	} else {
+// 		check(err)
+// 	}
 
-	return true
-}
+// 	return true
+// }
 
-// Helper function that checks
-// if it should renew and returns
+// Helper function that used to check
+// if it should renew and return
 // Releases.
 func get_releases(dest string) Releases {
-	if should_renew(dest) {
-		return renew_releases(dest)
-	}
-
-	file, err := os.Open(filepath.Join(dest, "releases.json"))
-	check(err)
-
-	return parse_releases(file)
+	return renew_releases(dest)
 }
