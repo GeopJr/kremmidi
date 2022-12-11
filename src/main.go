@@ -98,7 +98,6 @@ func main() {
 	var overwrite bool
 	var drop_db bool
 	var split_limit int
-	var locales string
 
 	// Whether it passed
 	// the CLI. (aka not help)
@@ -146,13 +145,6 @@ func main() {
 				Value:       5,
 				Destination: &split_limit,
 			},
-			&cli.StringFlag{
-				Name:        "locales",
-				Usage:       "Locales to download seperated by a comma or 'ALL'.",
-				DefaultText: "en-us",
-				Value:       "en-us",
-				Destination: &locales,
-			},
 			&cli.BoolFlag{
 				Name:        "overwrite",
 				Usage:       "Whether to overwrite builds if they already exist.",
@@ -189,8 +181,6 @@ func main() {
 			android = !no_android
 			desktop = !no_desktop
 			should_split = !no_should_split
-
-			locales = strings.ToLower(locales)
 
 			passed = true
 			return nil
@@ -258,32 +248,16 @@ func main() {
 
 	}
 
-	var locales_arr []string
-
-	// if multiple locales,
-	// create an array of string.
-	if strings.Contains(locales, ",") {
-		locales_arr = strings.Split(locales, ",")
-	}
-
 	if desktop {
 		desktop_path := filepath.Join(binaries_dest, releases.Version, "desktop")
 		os.MkdirAll(desktop_path, os.ModePerm)
 
 		for platform := range releases.Downloads {
-			for locale, link := range releases.Downloads[platform] {
-				lower_locale := strings.ToLower(locale)
+			link := releases.Downloads[platform]["ALL"]
+			binary_docs, part_docs := index([]string{link.Binary, link.Sig}, platform, desktop_path, releases.Version, "all", mirror, overwrite, should_split, split_limit, coll_binaries)
 
-				// If the array of locales is not empty AND it includes lower_locale,
-				// OR if lower_locale is equal to the cli locales
-				// OR if the cli locales is "all"
-				// index & save to the db.
-				if (len(locales_arr) > 0 && includes(locales_arr, lower_locale)) || (locales == lower_locale) || (locales == "all") {
-					binary_docs, part_docs := index([]string{link.Binary, link.Sig}, platform, desktop_path, releases.Version, lower_locale, mirror, overwrite, should_split, split_limit, coll_binaries)
+			db_insert(coll_binaries, coll_parts, binary_docs, part_docs)
 
-					db_insert(coll_binaries, coll_parts, binary_docs, part_docs)
-				}
-			}
 		}
 	}
 }

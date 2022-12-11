@@ -28,14 +28,14 @@ func check(err error) {
 	}
 }
 
-// Checks if item exists in array.
+// [Unused] Checks if item exists in array.
 // (["1", "2", "3"], "1") => true
 // (["1", "2", "3"], "5") => false
-func includes(arr []string, item string) bool {
-	for _, arr_item := range arr {
-		if arr_item == item {
-			return true
-		}
-	}
-	return false
-}
+// func includes(arr []string, item string) bool {
+// 	for _, arr_item := range arr {
+// 		if arr_item == item {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
